@@ -94,7 +94,7 @@ def _parse_item(item):
     #Try to get primary image first, if not found, .get() on empty dict gets None which
     #causes the or block to run
     image_url = (
-        item.get("image", {}).get("imageURL")
+        item.get("image", {}).get("imageUrl")
         or (item.get("thumbnailImages") or [{}])[0].get("imageUrl")
     )
 
