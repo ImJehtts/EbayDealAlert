@@ -14,7 +14,7 @@ load_dotenv()
 CLIENT_ID = os.getenv("EBAY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("EBAY_CLIENT_SECRET")
 
-#URLs that API calls with send requests to (1. For the OAuth token and 2. For finding items)
+#URLs that API calls to for sending requests (1. For the OAuth token and 2. For finding items)
 TOKEN_URL = "https://api.ebay.com/identity/v1/oauth2/token"
 SEARCH_URL = "https://api.ebay.com/buy/browse/v1/item_summary/search"
 
@@ -39,7 +39,7 @@ def get_token():
             "EBAY_CLIENT_ID / EBAY_CLIENT_SECRET."
         )
 
-    #Same request as postman. Requesting for a fresh OAuth token
+    #Requesting for a fresh OAuth token
     response = requests.post(
         TOKEN_URL,
         auth=(CLIENT_ID, CLIENT_SECRET),  
@@ -58,3 +58,52 @@ def get_token():
     _cached_token = payload["access_token"]
     _token_expires_at = time.time() + payload["expires_in"]
     return _cached_token
+
+
+def search_listings(keyword, max_price, currency="CAD", limit=10):
+    #This function returns Buy Now listing matching keyword and max_price or below
+    token = get_token()
+
+    #filters being passed into Ebay API 
+    filter_string = (
+        f"buyingOptions:{{FIXED_PRICE}}"
+        f"price:[..{max_price}],",
+        f"priceCurrency:{currency}"
+    )
+
+    #Requesting buy now items from Ebay API
+    response = requests.get(
+        SEARCH_URL,
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "X-EBAY-C-MARKETPLACE-ID": MARKETPLACE_ID,
+        },
+        params={"q": keyword, filter: filter_string, "limit": limit},
+        timeout=10,
+    )
+
+    #raises an exception for any 4xx/5xx
+    response.raise_for_status()    
+
+
+    return [_parse_item(item) for item in response.json().get("itemSummaries", [])]
+
+def _parse_item(item):
+    #Return only the listing attributes needed from Ebay API
+
+    #Try to get primary image first, if not found, .get() on empty dict gets None which
+    #causes the or block to run
+    image_url = (
+        item.get("image", {}).get("imageURL")
+        or (item.get("thumbnailImages") or [{}])[0].get("imageUrl")
+    )
+
+    return {
+        "itemId": item.get("itemId"),
+        "title": item.get("title"),
+        "price": float(item.get("price", {}).get("value", 0)),
+        "currency": item.get("price", {}).get("currency"),
+        "itemWebUrl": item.get("itemWebUrl"),
+        "imageUrl": image_url,
+        "isVariationGroup": "itemGroupHref" in item,
+    }
