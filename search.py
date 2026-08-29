@@ -60,7 +60,7 @@ def get_token():
     return _cached_token
 
 
-def search_listings(keyword, max_price, currency="CAD", limit=10):
+def search_listings(keyword, max_price, currency="CAD", limit=10, category_id=None):
     #This function returns Buy Now listing matching keyword and max_price or below
     token = get_token()
 
@@ -72,15 +72,20 @@ def search_listings(keyword, max_price, currency="CAD", limit=10):
     )
 
     #Requesting buy now items from Ebay API
+    params = {"q": keyword, "filter": filter_string, "limit": limit}
+    if category_id:
+        params["category_ids"] = category_id
+
     response = requests.get(
         SEARCH_URL,
         headers = {
             "Authorization": f"Bearer {token}",
             "X-EBAY-C-MARKETPLACE-ID": MARKETPLACE_ID,
         },
-        params={"q": keyword, filter: filter_string, "limit": limit},
+        params= params,
         timeout=10,
     )
+
 
     #raises an exception for any 4xx/5xx
     response.raise_for_status()    
@@ -105,5 +110,28 @@ def _parse_item(item):
         "currency": item.get("price", {}).get("currency"),
         "itemWebUrl": item.get("itemWebUrl"),
         "imageUrl": image_url,
+        # A "variation group" is one listing covering several options (sizes, colours), each with its own price
+        # eBay reports one of them, not the cheapest, so a flagged listing's price may not be what you'd pay when you open the listing.
         "isVariationGroup": "itemGroupHref" in item,
     }
+
+if __name__ == "__main__":
+    KEYWORD = "nintendo switch"
+    MAX_PRICE = 300
+
+    print(f"Searching: '{KEYWORD}' under ${MAX_PRICE} CAD\n")
+
+    listings = search_listings(KEYWORD, MAX_PRICE)
+
+    if not listings:
+        print("No listings find. Try different searches or try again later")
+
+    for n, listing in enumerate(listings, start=1):
+        # Tag multi-variation listings so the price is read with suspicion and I can add to in future if needed.
+        flag = "  [variation group]" if listing["isVariationGroup"] else ""
+        print(f"{n}. {listing['title'][:70]}{flag}")
+        print(f"   ${listing['price']:.2f} {listing['currency']}")
+        print(f"   {listing['itemWebUrl'][:90]}")
+        print(f"   img: {'yes' if listing['imageUrl'] else 'MISSING'}\n")
+
+    print(f"{len(listings)} listing(s) found")
