@@ -115,11 +115,44 @@ def _parse_item(item):
         "isVariationGroup": "itemGroupHref" in item,
     }
 
+def get_category_refinements(keyword, limit=1):
+    token = get_token()
+
+    params = {"q": keyword, "fieldgroups": "CATEGORY_REFINEMENTS", "limit": limit}
+
+    response = requests.get(
+        SEARCH_URL,
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "X-EBAY-C-MARKETPLACE-ID": MARKETPLACE_ID,
+        },
+        params= params,
+        timeout=10,
+    )
+    response.raise_for_status()    
+
+    distributions = response.json().get("refinement", {}).get("categoryDistributions", [])
+
+    categories = [
+        {
+            "categoryId": category.get("categoryId"),
+            "categoryName": category.get("categoryName"),
+            # eBay sends matchCount as a string here, same trap as price.value.
+            "matchCount": int(category.get("matchCount", 0)),
+        }
+        for category in distributions
+    ]
+
+    return sorted(categories, key=lambda category: category["matchCount"], reverse=True)[:15]
+
 if __name__ == "__main__":
-    KEYWORD = "nintendo switch"
-    MAX_PRICE = 300
+    KEYWORD = "iphone 17"
+    MAX_PRICE = 800
 
     print(f"Searching: '{KEYWORD}' under ${MAX_PRICE} CAD\n")
+    print("\nCategories:")
+    for category in get_category_refinements(KEYWORD):
+        print(f"  {category['matchCount']:>6}  {category['categoryName']}  ({category['categoryId']})")
 
     listings = search_listings(KEYWORD, MAX_PRICE)
 
