@@ -30,6 +30,7 @@ MARKETPLACE_ID = "EBAY_CA"
 _cached_token = None
 _token_expires_at = 0
 
+
 def get_token():
     #This function will return eBay OAuth token, reusing the cached one if it exists 
     global _cached_token, _token_expires_at
@@ -99,6 +100,7 @@ def search_listings(keyword, max_price, currency="CAD", limit=10, category_id=No
 
     return [_parse_item(item) for item in response.json().get("itemSummaries", [])]
 
+
 def _parse_item(item):
     #Return only the listing attributes needed from Ebay API
 
@@ -121,7 +123,9 @@ def _parse_item(item):
         "isVariationGroup": "itemGroupHref" in item,
     }
 
+
 def get_category_refinements(keyword, limit=1):
+    #NEED TO ADD COMMENTS#
     token = get_token()
 
     params = {"q": keyword, "fieldgroups": "CATEGORY_REFINEMENTS", "limit": limit}
@@ -150,6 +154,7 @@ def get_category_refinements(keyword, limit=1):
     ]
 
     return sorted(categories, key=lambda category: category["matchCount"], reverse=True)[:15]
+
 
 if __name__ == "__main__":
     KEYWORD = "iphone 17"
