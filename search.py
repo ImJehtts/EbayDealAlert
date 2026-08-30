@@ -3,16 +3,22 @@ Local script to test eBay API script
 Fetches OAuth token and searches buy now listings under the desired price point
 """
 
-import os
 import time
 import requests
-from dotenv import load_dotenv
+import boto3
 
-#reads .env into enviroment variables 
-load_dotenv()
+#One client, created at import
+_ssm = boto3.client("ssm", region_name="us-east-1")
 
-CLIENT_ID = os.getenv("EBAY_CLIENT_ID")
-CLIENT_SECRET = os.getenv("EBAY_CLIENT_SECRET")
+def _get_parameter(name, decrypt=False):
+    #Read one value out of SSM Parameter Store
+    response = _ssm.get_parameter(Name=name, WithDecryption=decrypt)
+    return response["Parameter"]["Value"]
+
+#Fetched at import, not inside get_token(). On Lambda this runs once per cold
+#   start instead of once per invocation
+CLIENT_ID = _get_parameter("/ebay-deal-finder/client-id")
+CLIENT_SECRET = _get_parameter("/ebay-deal-finder/client-secret", decrypt=True)
 
 #URLs that API calls to for sending requests (1. For the OAuth token and 2. For finding items)
 TOKEN_URL = "https://api.ebay.com/identity/v1/oauth2/token"
@@ -32,10 +38,10 @@ def get_token():
     if _cached_token and time.time() < _token_expires_at - 300:
         return _cached_token
 
-    #If either are missing or typed wrong from .env, raise error 
+    #If either are missing or typed wrong, raise error 
     if not CLIENT_ID or not CLIENT_SECRET:
         raise RuntimeError(
-            "Missing credentials. Check that .env exists and uses "
+            "Missing credentials. Check that credentials exists and uses "
             "EBAY_CLIENT_ID / EBAY_CLIENT_SECRET."
         )
 
