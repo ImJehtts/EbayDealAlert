@@ -9,3 +9,6 @@ venv/
 # OS noise
 .DS_Store
 Thumbs.db
+
+package/
+*.zip

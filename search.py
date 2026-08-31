@@ -32,7 +32,10 @@ _token_expires_at = 0
 
 
 def get_token():
-    #This function will return eBay OAuth token, reusing the cached one if it exists 
+    """
+    This function will return eBay OAuth token, reusing the cached one if it exists 
+    """
+
     global _cached_token, _token_expires_at
 
     #If current cached token has more than 5 minutes left
@@ -102,7 +105,9 @@ def search_listings(keyword, max_price, currency="CAD", limit=10, category_id=No
 
 
 def _parse_item(item):
-    #Return only the listing attributes needed from Ebay API
+    """
+    Return only the listing attributes needed from Ebay API
+    """
 
     #Try to get primary image first, if not found, .get() on empty dict gets None which
     #causes the or block to run
