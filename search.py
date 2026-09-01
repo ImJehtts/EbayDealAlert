@@ -71,7 +71,7 @@ def get_token():
 
 
 def search_listings(keyword, max_price, currency="CAD", limit=10, category_id=None):
-    #This function returns Buy Now listing matching keyword and max_price or below
+    """This function returns Buy Now listing matching keyword and max_price or below"""
     token = get_token()
 
     #filters being passed into Ebay API 
