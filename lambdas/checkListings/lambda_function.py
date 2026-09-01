@@ -33,6 +33,8 @@ def lambda_handler(event, context):
         print(f"{alert['keyword']}: {len(listings)} listings")
         
         for listing in listings:
+            #Can update later when Email time for whole Title
             print(f"  ${listing['price']} — {listing['title'][:60]}")
+            print(f"      {listing['itemWebUrl']}")
 
     return {"scanned": len(alerts)}
