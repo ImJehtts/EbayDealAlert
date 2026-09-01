@@ -34,7 +34,8 @@ def lambda_handler(event, context):
         
         for listing in listings:
             #Can update later when Email time for whole Title
-            print(f"  ${listing['price']} — {listing['title'][:60]}")
-            print(f"      {listing['itemWebUrl']}")
+            flag = " [variation]" if listing["isVariationGroup"] else ""
+            print(f"  ${listing['price']}{flag} — {listing['title'][:50]}")
+            print(f"      {listing['itemWebUrl'][:80]}")
 
     return {"scanned": len(alerts)}
