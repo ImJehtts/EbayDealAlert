@@ -76,10 +76,12 @@ def search_listings(keyword, max_price, currency="CAD", limit=10, category_id=No
 
     #filters being passed into Ebay API 
     filter_string = (
-        f"buyingOptions:{{FIXED_PRICE}}"
-        f"price:[..{max_price}],",
+        f"buyingOptions:{{FIXED_PRICE}},"
+        f"price:[..{max_price}],"
         f"priceCurrency:{currency}"
     )
+
+    print(f"FILTER: {filter_string}")
 
     #Requesting buy now items from Ebay API
     params = {"q": keyword, "filter": filter_string, "limit": limit}
@@ -162,8 +164,8 @@ def get_category_refinements(keyword, limit=1):
 
 
 if __name__ == "__main__":
-    KEYWORD = "iphone 17"
-    MAX_PRICE = 800
+    KEYWORD = "nintendo switch"
+    MAX_PRICE = 300
 
     print(f"Searching: '{KEYWORD}' under ${MAX_PRICE} CAD\n")
     print("\nCategories:")
