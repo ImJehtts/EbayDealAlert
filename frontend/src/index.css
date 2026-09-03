@@ -1,27 +1,147 @@
 :root {
-  --bg: #ffffff;
-  --surface: #f7f8fa;
-  --border: #d5dbdb;
-  --border-strong: #232f3e;
+    --bg: #ffffff;
+    --surface: #F7F8FA;
+    --border: #d5dbdb;
+    --border-strong: #232f3e;
 
-  --text: #232f3e;
-  --text-muted: #6b7280;
-  --text-inverse: #ffffff;
+    --text: #232f3e;
+    --text-muted: #6b7280;
+    --text-inverse: #ffffff;
 
-  --accent: #ff9900;
-  --accent-hover: #e88b00;
-  --price: #1d8102;
-  --danger: #d13212;
+    --accent: #ff9900;
+    --accent-hover: #e88b00;
+    --price: #1d8102;
+    --delete: #d13212;
 
-  --radius: 8px;
-  --radius-sm: 6px;
-  --gap: 12px;
-  --gap-lg: 20px;
-  --pad-card: 20px;
-  --max-width: 720px;
+    --radius: 0.75rem;
+    --radius-sm: 0.5625rem;
+    --gap: 1.0125rem;
+    --gap-lg: 1.6875rem;
+    --pad-card: 1.6875rem;
+    --max-width: 82.5rem;
 
-  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --fs-label: 13px;
-  --fs-body: 15px;
-  --fs-h1: 24px;
+    --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fs-label: 1.096875rem;
+    --fs-body: 1.35rem;
+    --fs-h1: 2.7rem;
+}
+
+.page {
+    width: 100%;
+    max-width: var(--max-width);
+    /*centers the page horizontally*/
+    margin: 0 auto;
+    padding: 2.7rem 1.6875rem;
+}
+
+input,
+select,
+button {
+    font: inherit;
+    padding: 0.75rem 0.9375rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+}
+
+.btn-delete {
+    color: var(--delete);
+    font-size: var(--fs-label);
+    padding: 0.375rem 0.9375rem;
+}
+
+/*box-sizing: border-box makes width: 100% */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: var(--fs-body);
+    line-height: 1.5;
+}
+
+.page {
+    width: 100%;
+    max-width: var(--max-width);
+    /*centers the page horizontally*/
+    margin: 0 auto;
+    padding: 1.8rem 1.125rem;
+}
+
+.CreateAlertCard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--pad-card);
+    margin-bottom: var(--gap-lg);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+input,
+select,
+button {
+    font: inherit;
+    padding: 0.5rem 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.row input {
+    /*makes the input take up all available space in the row*/
+    flex: 1;
+}
+
+.btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--text-inverse);
+    font-weight: 600;
+}
+
+.btn-secondary {
+    border-color: var(--border-strong);
+}
+
+.btn-delete {
+    color: var(--delete);
+    font-size: var(--fs-label);
+    padding: 0.25rem 0.625rem;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.btn-secondary:hover {
+    background: var(--surface);
+}
+
+.btn-delete:hover {
+    border-color: var(--delete);
 }
