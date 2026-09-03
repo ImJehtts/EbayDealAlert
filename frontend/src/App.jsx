@@ -21,7 +21,7 @@ export default function App() {
     if (!keyword || !maxPrice || !email) {
     setStatus("Keyword, max price, and email are all required.");
     return;
-    }
+    } 
     const body = { email, keyword, maxPrice: Number(maxPrice) };
       if (categoryId) {
         const chosen = categories.find((c) => c.categoryId === categoryId);
@@ -124,7 +124,7 @@ export default function App() {
             <div className="row">
               <input
                 type="text"
-                placeholder="Keyword"
+                placeholder="iPhone 6"
                 value={keyword}
                 onChange={(e) => {
                   setKeyword(e.target.value);
@@ -156,17 +156,17 @@ export default function App() {
             <span className="label">Notify this email</span>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="ebaydealfinderaws@gmail.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())}
             />
           </label>
-          
+
           <label className="field">
             <span className="label">Max price (CAD)</span>
             <input
               type="number"
-              placeholder="Max Price"
+              placeholder="$400"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
             />
@@ -183,7 +183,7 @@ export default function App() {
           <div className="row">
             <input
               type="email"
-              placeholder="Email"
+              placeholder="ebaydealfinderaws@gmail.com"
               value={lookupEmail}
               onChange={(e) => setLookupEmail(e.target.value)}
             />
