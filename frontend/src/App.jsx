@@ -114,9 +114,9 @@ export default function App() {
   return (
     <div className="page">
       <div >
-        <h1>eBay Deal Finder</h1>
-        <h2 style={{ fontWeight: "normal" }}>Get notified when eBay listings hit your price.</h2>
-        <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
+        <h1 style = {{ marginBottom: 0 }}>eBay Deal Finder</h1>
+        <h2 style={{ fontWeight: "normal", fontSize: "1.75rem", marginBottom: "-1rem" }}>Get notified when eBay listings hit your price.</h2>
+        <p>Demo mode — notification emails only send to pre-verified addresses. Use ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
         <section className="CreateAlertCard">
           <h2>Create an alert</h2>
           <label className="field">
@@ -166,7 +166,7 @@ export default function App() {
             <span className="label">Max price (CAD)</span>
             <input
               type="number"
-              placeholder="$400"
+              placeholder="400"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
             />
