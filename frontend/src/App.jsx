@@ -118,6 +118,7 @@ export default function App() {
         <h2 style={{ fontWeight: "normal" }}>Get notified when eBay listings hit your price.</h2>
         <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
         <section className="CreateAlertCard">
+          <h2>Create an alert</h2>
           <div className="row">
             <input
               type="text"
@@ -162,28 +163,41 @@ export default function App() {
         </section>
       </div>
       
-      <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
-        <h2>List & Delete Alerts</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={lookupEmail}
-          onChange={(e) => setLookupEmail(e.target.value)}
-        />
-        <button onClick={loadAlerts}>Load Alerts</button>
-        {alerts.length === 0 ? (
-          <p>No alerts yet - enter an email above and we'll list all relevant alerts.</p>
-        ) : (
-          alerts.map((alert) => (
-            <div key={alert.alertId}>
-              <strong>{alert.keyword}</strong>
-              <span> Under ${alert.maxPrice} {alert.currency}</span>
-              {alert.categoryName && <span> · {alert.categoryName}</span>}
-              <button className = "btn-delete" onClick={() => deleteAlert(alert.alertId)}>Delete</button>
+      <div>
+        <section className="ListDeleteCard">
+          <h2>List & Delete Alerts</h2>
+          <div className="row">
+            <input
+              type="email"
+              placeholder="Email"
+              value={lookupEmail}
+              onChange={(e) => setLookupEmail(e.target.value)}
+            />
+            <button className="btn-secondary" onClick={loadAlerts}>Load Alerts</button>
             </div>
-          ))
-        )}
+            {alerts.length === 0 ? (
+              <p className="empty">
+                No alerts yet - enter an email above and we'll list all relevant alerts.
+              </p>
+            ) : (
+              alerts.map((alert) => (
+                <div className="alert-row" key={alert.alertId}>
+                  <div>
+                  <strong>{alert.keyword}</strong>
+                    <div className="alert-details">
+                      <span> Under ${alert.maxPrice} {alert.currency}</span>
+                      {alert.categoryName && <span> · {alert.categoryName}</span>}
+                    </div>
+                  </div>
+                  <button className = "btn-delete" 
+                    onClick={() => deleteAlert(alert.alertId)}>
+                    Delete
+                  </button>
+                </div>
+              ))
+            )}
+        </section>
+        </div>
       </div>
-    </div>
   );
 }
