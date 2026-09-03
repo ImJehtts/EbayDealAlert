@@ -13,10 +13,20 @@ export default function App() {
   const [alerts, setAlerts] = useState([]);
   const [lookupEmail, setLookupEmail] = useState("");
 
+  //Category useState variable
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
+
   const createAlert = async () => {
     if (!keyword || !maxPrice || !email) {
     setStatus("Keyword, max price, and email are all required.");
     return;
+    }
+    const body = { email, keyword, maxPrice: Number(maxPrice) };
+      if (categoryId) {
+        const chosen = categories.find((c) => c.categoryId === categoryId);
+        body.categoryId = categoryId;
+        body.categoryName = chosen ? chosen.categoryName : "";
     }
     setStatus("Creating alert...");
     try {
@@ -25,7 +35,7 @@ export default function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, keyword, maxPrice: Number(maxPrice) }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
@@ -38,6 +48,8 @@ export default function App() {
       setStatus(`Created ${data.alertId}`);
       setKeyword("");
       setMaxPrice("");
+      setCategories([]);
+      setCategoryId("");
 
     } catch (err) {
       setStatus(`Error: ${err.message}`);
@@ -75,22 +87,67 @@ export default function App() {
     }
   };
 
+  const findCategories = async () => {
+  if (!keyword) {
+    setStatus("Enter a keyword first.");
+    return;
+  }
+  setStatus("Finding categories...");
+  try {
+    const response = await fetch(
+      `${API}/categories?q=${encodeURIComponent(keyword)}`
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      setStatus(`Error: ${data.error || response.status}`);
+      return;
+    }
+    setCategories(data.categories);
+    //Reset the selected category ID when new categories are loaded
+    setCategoryId("");
+    setStatus(`${data.categories.length} categories found.`);
+  } catch (err) {
+    setStatus(`Error: ${err.message}`);
+  }
+};
+
   return (
     <>
       <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
-        <h1>Create Alert</h1>
+        <h1>eBay Deal Finder</h1>
+        <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
+        <input
+          type="text"
+          placeholder="Keyword"
+          value={keyword}
+          onChange={(e) => {
+            setKeyword(e.target.value);
+            setCategoryId("");
+            setCategories([]);
+          }}
+        />
+        <button onClick={findCategories}>Find categories</button>
+
+        {categories.length > 0 && (
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">All categories</option>
+            {categories.map((c) => (
+              <option key={c.categoryId} value={c.categoryId}>
+                {c.categoryName} ({c.matchCount.toLocaleString()})
+              </option>
+            ))}
+          </select>
+        )}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Keyword"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
+        
         <input
           type="number"
           placeholder="Max Price"
@@ -101,7 +158,7 @@ export default function App() {
         {status && <p>{status}</p>}
       </div>
       <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
-        <h1>List Alerts</h1>
+        <h1>List & Delete Alerts</h1>
         <input
           type="email"
           placeholder="Email"
@@ -121,10 +178,6 @@ export default function App() {
             </div>
           ))
         )}
-      </div>
-      <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
-        <h1>Heads-up</h1>
-        <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
       </div>
     </>
   );

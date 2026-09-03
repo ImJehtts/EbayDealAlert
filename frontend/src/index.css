@@ -1,0 +1,27 @@
+:root {
+  --bg: #ffffff;
+  --surface: #f7f8fa;
+  --border: #d5dbdb;
+  --border-strong: #232f3e;
+
+  --text: #232f3e;
+  --text-muted: #6b7280;
+  --text-inverse: #ffffff;
+
+  --accent: #ff9900;
+  --accent-hover: #e88b00;
+  --price: #1d8102;
+  --danger: #d13212;
+
+  --radius: 8px;
+  --radius-sm: 6px;
+  --gap: 12px;
+  --gap-lg: 20px;
+  --pad-card: 20px;
+  --max-width: 720px;
+
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-label: 13px;
+  --fs-body: 15px;
+  --fs-h1: 24px;
+}
