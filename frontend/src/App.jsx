@@ -119,45 +119,59 @@ export default function App() {
         <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
         <section className="CreateAlertCard">
           <h2>Create an alert</h2>
-          <div className="row">
-            <input
-              type="text"
-              placeholder="Keyword"
-              value={keyword}
-              onChange={(e) => {
-                setKeyword(e.target.value);
-                setCategoryId("");
-                setCategories([]);
-              }}
-            />
-            <button className = "btn-secondary" onClick={findCategories}>Find categories</button>
-          </div>
+          <label className="field">
+            <span className="label">Keyword</span>
+            <div className="row">
+              <input
+                type="text"
+                placeholder="Keyword"
+                value={keyword}
+                onChange={(e) => {
+                  setKeyword(e.target.value);
+                  setCategoryId("");
+                  setCategories([]);
+                }}
+              />
+              <button className = "btn-secondary" onClick={findCategories}>Find categories</button>
+            </div>
+          </label>
           {categories.length > 0 && (
-            <select
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            >
-              <option value="">All categories</option>
-              {categories.map((c) => (
-                <option key={c.categoryId} value={c.categoryId}>
-                  {c.categoryName} ({c.matchCount.toLocaleString()})
-                </option>
-              ))}
-            </select>
+            <label className="field">
+              <span className="label">Category <span className="optional">(optional)</span></span>
+              <select
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+              >
+                <option value="">All categories</option>
+                {categories.map((c) => (
+                  <option key={c.categoryId} value={c.categoryId}>
+                    {c.categoryName} ({c.matchCount.toLocaleString()})
+                  </option>
+                ))}
+              </select>
+            </label>
           )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+
+          <label className="field">
+            <span className="label">Notify this email</span>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
           
-          <input
-            type="number"
-            placeholder="Max Price"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-          />
+          <label className="field">
+            <span className="label">Max price (CAD)</span>
+            <input
+              type="number"
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </label>
+
           <button className = "btn-primary" onClick={createAlert}>Create Alert</button>
           {status && <p>{status}</p>}
         </section>
