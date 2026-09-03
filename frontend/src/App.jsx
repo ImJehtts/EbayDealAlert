@@ -12,6 +12,8 @@ export default function App() {
   //List & Delete Alerts useState variables
   const [alerts, setAlerts] = useState([]);
   const [lookupEmail, setLookupEmail] = useState("");
+  const [listStatus, setListStatus] = useState("");
+
 
   //Category useState variable
   const [categories, setCategories] = useState([]);
@@ -61,12 +63,13 @@ export default function App() {
         const response = await fetch(`${API}/alerts?email=${encodeURIComponent(lookupEmail)}`);
         const data = await response.json();
         if (!response.ok) {
-          setStatus(`Error: ${data.error || response.status}`);
+          setListStatus(`Error: ${data.error || response.status}`);
           return;
         }
       setAlerts(data.alerts);
+      setListStatus("");
     } catch (err) {
-      setStatus(`Error: ${err.message}`);
+      setListStatus(`Error: ${err.message}`);
     }
   };
 
@@ -78,12 +81,12 @@ export default function App() {
       );
       if (!response.ok) {
         const data = await response.json();
-        setStatus(`Error: ${data.error || response.status}`);
+        setListStatus(`Error: ${data.error || response.status}`);
         return;
       }
       loadAlerts();
     } catch (err) {
-      setStatus(`Error: ${err.message}`);
+      setListStatus(`Error: ${err.message}`);
     }
   };
 
@@ -210,6 +213,7 @@ export default function App() {
                 </div>
               ))
             )}
+            {listStatus && <p className="status">{listStatus}</p>}
         </section>
         </div>
       </div>
