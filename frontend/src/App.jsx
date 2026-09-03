@@ -112,53 +112,58 @@ export default function App() {
 };
 
   return (
-    <>
-      <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
+    <div className="page">
+      <div >
         <h1>eBay Deal Finder</h1>
+        <h2 style={{ fontWeight: "normal" }}>Get notified when eBay listings hit your price.</h2>
         <p>Due to my AWS SES being in sandbox environment, please use the email: ebaydealfinderaws@gmail.com to create, list, and delete alerts</p>
-        <input
-          type="text"
-          placeholder="Keyword"
-          value={keyword}
-          onChange={(e) => {
-            setKeyword(e.target.value);
-            setCategoryId("");
-            setCategories([]);
-          }}
-        />
-        <button onClick={findCategories}>Find categories</button>
-
-        {categories.length > 0 && (
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
-            <option value="">All categories</option>
-            {categories.map((c) => (
-              <option key={c.categoryId} value={c.categoryId}>
-                {c.categoryName} ({c.matchCount.toLocaleString()})
-              </option>
-            ))}
-          </select>
-        )}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        
-        <input
-          type="number"
-          placeholder="Max Price"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-        />
-        <button onClick={createAlert}>Create Alert</button>
-        {status && <p>{status}</p>}
+        <section className="CreateAlertCard">
+          <div className="row">
+            <input
+              type="text"
+              placeholder="Keyword"
+              value={keyword}
+              onChange={(e) => {
+                setKeyword(e.target.value);
+                setCategoryId("");
+                setCategories([]);
+              }}
+            />
+            <button className = "btn-secondary" onClick={findCategories}>Find categories</button>
+          </div>
+          {categories.length > 0 && (
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              <option value="">All categories</option>
+              {categories.map((c) => (
+                <option key={c.categoryId} value={c.categoryId}>
+                  {c.categoryName} ({c.matchCount.toLocaleString()})
+                </option>
+              ))}
+            </select>
+          )}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          
+          <input
+            type="number"
+            placeholder="Max Price"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+          />
+          <button className = "btn-primary" onClick={createAlert}>Create Alert</button>
+          {status && <p>{status}</p>}
+        </section>
       </div>
+      
       <div style={{ padding: 24, maxWidth: 480, fontFamily: "system-ui" }}>
-        <h1>List & Delete Alerts</h1>
+        <h2>List & Delete Alerts</h2>
         <input
           type="email"
           placeholder="Email"
@@ -174,11 +179,11 @@ export default function App() {
               <strong>{alert.keyword}</strong>
               <span> Under ${alert.maxPrice} {alert.currency}</span>
               {alert.categoryName && <span> · {alert.categoryName}</span>}
-              <button onClick={() => deleteAlert(alert.alertId)}>Delete</button>
+              <button className = "btn-delete" onClick={() => deleteAlert(alert.alertId)}>Delete</button>
             </div>
           ))
         )}
       </div>
-    </>
+    </div>
   );
 }
