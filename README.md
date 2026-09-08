@@ -29,3 +29,4 @@ AWS Lambda, API Gateway (HTTP API), DynamoDB, EventBridge Scheduler, SES, SSM Pa
 4. **Pricing accuracy**: Currently there is no minimum pricing and shipping is not factored into the price. These changes will allow for more accurate results.
 5. **Multi-Category alerts**: Users can only add a single category maximum to their alerts and this will allow them to add more to broaden their search
 6. **Email only**: Adding SMS Support to provide both Email via SES and SMS via SNS.
+7. **Test/Edges Cases**: Some cases are prevented, however there are still more to cover which I plan to do.
