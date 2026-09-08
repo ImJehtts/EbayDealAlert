@@ -1,7 +1,7 @@
 # AWS eBay Deal Alert
 This Project is a serverless deal-alert app for eBay: you set a keyword, a max price, and (optionally) a category, and it watches eBay for matching listings and emails you when a new one shows up. 
 
-[Link to Project (https://d3dbutpcivdhu3.cloudfront.net/)]([url](https://d3dbutpcivdhu3.cloudfront.net/))
+[Link to Project (https://d3dbutpcivdhu3.cloudfront.net/)](https://d3dbutpcivdhu3.cloudfront.net/)
 
 ## Video Demo
 
