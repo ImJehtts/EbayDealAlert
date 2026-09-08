@@ -8,7 +8,8 @@ This Project is a serverless deal-alert app for eBay: you set a keyword, a max p
 It's a fully serverless AWS backend behind a React frontend. A CRUD API (API Gateway + Lambda + DynamoDB) lets users create, list, and delete alerts. A scheduled Lambda (EventBridge Scheduler) polls the eBay Browse API for every active alert, deduplicates matches against previously-seen items in DynamoDB (with TTL-based cleanup), and batches new hits into a single email per alert via SES. The frontend is a static React app served from S3 through CloudFront.
 
 ## AWS Diagram
-<img width="6116" height="4496" alt="image" src="https://github.com/user-attachments/assets/d445a5e8-cd86-4033-b400-aafec1d6fc41" />
+<img width="952" height="689" alt="image" src="https://github.com/user-attachments/assets/47594de9-05a6-46f4-b19e-fc7aa68f8b2c" />
+
 
 
 ## AWS Services used
